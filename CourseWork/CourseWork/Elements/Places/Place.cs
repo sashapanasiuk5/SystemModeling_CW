@@ -61,4 +61,9 @@ public class Place
     {
         _meanTokenCount += deltaT * TokenCount;
     }
+
+    public double GetMeanTokenCount(double totalTime)
+    {
+        return _meanTokenCount / totalTime;
+	}
 }

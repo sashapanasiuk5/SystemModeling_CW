@@ -18,7 +18,7 @@ var refuelings = new Place("Refuelings");
 var refuelingExpenses = new Place("Refueling expenses");
 var leaves = new Place("Leaves");
 
-var freeRunways = new Place("Free runways", 2);
+var freeRunways = new Place("Free runways", 8);
 
 var planeQueue_refueled = new Place("Plane queue (refueled)");
 
@@ -65,12 +65,12 @@ var countIncomeForLandingWithotWaiting = new OutputTransition(12, landedPlanes, 
 
 var releaseRunway1 = new Transition(13, [landing1Place], [freeRunways, landedPlanes], 0, landing1Place)
 {
-    Generator = new ConstantGenerator(35)
+    Generator = new ConstantGenerator(17)
 };
 
 var releaseRunway2 = new Transition(14, [landing2Place], [freeRunways, landedPlanes], 0, landing2Place)
 {
-    Generator = new ConstantGenerator(35)
+    Generator = new ConstantGenerator(17)
 };
 
 var model = new PetriNet([
@@ -111,7 +111,7 @@ var model = new PetriNet([
     income2
 ]);
 
-model.Run(1000);
+model.Run(1440);
 
 Console.WriteLine("Refuelings expenses: "+refuelingExpenses.TokenCount);
 Console.WriteLine("Leaves: " + leaves.TokenCount);
@@ -119,5 +119,5 @@ Console.WriteLine("Leaves: " + leaves.TokenCount);
 Console.WriteLine("Income With waiting: "+income1.TokenCount);
 Console.WriteLine("Income Without waiting: "+income2.TokenCount);
 
-var profit = income1.TokenCount + income2.TokenCount - refuelingExpenses.TokenCount;
+var profit = (income1.TokenCount + income2.TokenCount - refuelingExpenses.TokenCount) * 365;
 Console.WriteLine("Profit: " + profit);

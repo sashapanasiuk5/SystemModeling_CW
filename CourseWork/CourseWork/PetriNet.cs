@@ -6,10 +6,13 @@ public class PetriNet
 
     private readonly List<Place> _places;
 
-    public PetriNet(List<ITransition> transitions, List<Place> places)
+    private readonly bool _printInfo;
+
+	public PetriNet(List<ITransition> transitions, List<Place> places, bool printInfo = true)
     {
         _transitions = transitions;
         _places = places;
+        _printInfo = printInfo;
     }
 
     public void Run(double tModel)
@@ -22,16 +25,17 @@ public class PetriNet
             {
                 var transition = _transitions.First(x => x.NearestTMoment == tNext);
                 transition.ExitTokens(tNext);
-                
-                Console.WriteLine("------------- T Next - "+ tNext + "---------------");
-                foreach (var place in _places)
+                if (_printInfo)
                 {
-                    place.CollectStatistic(tNext - t);
-                    Console.WriteLine(place.Name + ": " + place.TokenCount);
+                    Console.WriteLine("------------- T Next - "+ tNext + "---------------");
+                    foreach (var place in _places)
+                    {
+                        place.CollectStatistic(tNext - t);
+                        Console.WriteLine(place.Name + ": " + place.TokenCount);
+                    }
+                    Console.WriteLine("Transition "+ transition.Id + " was triggered");
+                    Console.WriteLine("-----------------------------------------------\n");
                 }
-                Console.WriteLine("Transition "+ transition.Id + " was triggered");
-                Console.WriteLine("-----------------------------------------------\n");
-                
                 t = tNext;
             }
 
@@ -48,10 +52,16 @@ public class PetriNet
                 prioritizedTransitions = prioritizedTransitions.Where(x => x.CanTrigger).OrderByDescending(x => x.Priority).ToList();
             }
         }
-    }
 
-    private void PrintInfo()
-    {
-        
-    }
+		if (_printInfo)
+		{
+			Console.WriteLine("------------- Statistics ---------------");
+			foreach (var place in _places)
+			{
+				var meanTokenCount = place.GetMeanTokenCount(tModel);
+				Console.WriteLine("Mean token count for place " + place.Name + ": " + meanTokenCount);
+			}
+			Console.WriteLine("-----------------------------------------------\n");
+		}
+	}
 }
