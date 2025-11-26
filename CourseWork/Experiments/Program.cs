@@ -62,57 +62,6 @@ int FibonacciSearch(int left, int right, Func<int, double> func)
 	return left;
 }
 
-//var bestN = FibonacciSearch(3, 12, RunModel);
-//Console.WriteLine("Best number of runways: " + bestN);
+var bestN = FibonacciSearch(3, 12, RunModel);
+Console.WriteLine("Best number of runways: " + bestN);
 
-
-var values = new List<double>();
-for (int i = 0; i < 4; i++)
-{
-	var (model, paybackFunc) = ModelFactory.GetNet(3);
-
-	model.Run(120);
-	var paybackTime = paybackFunc(365*12);
-
-	if (paybackTime != Double.PositiveInfinity)
-		values.Add(paybackTime);
-}
-double max = values.Max();
-double min = values.Min();
-
-double diff = max - min;
-Console.WriteLine("2 hours: Max diff: {0:F5}", diff);
-
-values = new List<double>();
-for (int i = 0; i < 4; i++)
-{
-	var (model, paybackFunc) = ModelFactory.GetNet(3);
-
-	model.Run(720);
-	var paybackTime = paybackFunc(365*2);
-
-	if (paybackTime != Double.PositiveInfinity)
-		values.Add(paybackTime);
-}
-max = values.Max();
-min = values.Min();
-
-diff = max - min;
-Console.WriteLine("12 hours: Max diff: {0:F5}", diff);
-
-values = new List<double>();
-for (int i = 0; i < 4; i++)
-{
-	var (model, paybackFunc) = ModelFactory.GetNet(3);
-
-	model.Run(1440);
-	var paybackTime = paybackFunc(365);
-
-	if (paybackTime != Double.PositiveInfinity)
-		values.Add(paybackTime);
-}
-max = values.Max();
-min = values.Min();
-
-diff = max - min;
-Console.WriteLine("1 day: Max diff: {0:F5}", diff);
